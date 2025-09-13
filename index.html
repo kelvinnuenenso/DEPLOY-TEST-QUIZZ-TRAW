@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Elevado Quizz - Crie quizzes que convertem em minutos</title>
+    <meta name="description" content="Plataforma completa para criar quizzes interativos, formulários multi-etapas e funis de vendas. Capture leads, aumente conversões e engaje sua audiência." />
+    <meta name="author" content="Elevado Quizz" />
+
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#2563EB" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Elevado Quizz" />
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Google Fonts for better typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&family=Open+Sans:wght@300;400;500;600;700&family=Lato:wght@300;400;700&family:Playfair+Display:wght@400;500;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <!-- SEO Meta Tags -->
+    <meta property="og:title" content="Elevado Quizz - Crie quizzes que convertem em minutos" />
+    <meta property="og:description" content="Plataforma completa para criar quizzes interativos, formulários multi-etapas e funis de vendas. Capture leads, aumente conversões e engaje sua audiência." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://elevadoquizz.com.br/og-image.png" />
+    <meta property="og:url" content="https://elevadoquizz.com.br" />
+    <meta property="og:site_name" content="Elevado Quizz" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@elevadoquizz" />
+    <meta name="twitter:title" content="Elevado Quizz - Crie quizzes que convertem em minutos" />
+    <meta name="twitter:description" content="Plataforma completa para criar quizzes interativos, formulários multi-etapas e funis de vendas. Capture leads, aumente conversões e engaje sua audiência." />
+    <meta name="twitter:image" content="https://elevadoquizz.com.br/og-image.png" />
+
+    <!-- Additional SEO -->
+    <meta name="robots" content="index, follow" />
+    <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <link rel="canonical" href="https://elevadoquizz.com.br" />
+    
+    <!-- Preload Critical Resources -->
+    <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="//fonts.gstatic.com" />
+    
+    <!-- Register Service Worker -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then((registration) => {
+              console.log('SW registered: ', registration);
+            })
+            .catch((registrationError) => {
+              console.log('SW registration failed: ', registrationError);
+            });
+        });
+      }
+    </script>
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
