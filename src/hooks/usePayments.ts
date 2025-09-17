@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { useStripe, useElements } from '@stripe/react-stripe-js'
-import { supabase } from '@/lib/supabase'
-import { useAuth } from './useAuth'
+import { supabase } from '@/integrations/supabase/client'
+import { useAuth } from '@/hooks/useAuth'
 import { toast } from '@/components/ui/use-toast'
+import { TEST_MODE } from '@/lib/flags'
 
 export function usePayments() {
   const stripe = useStripe()
@@ -22,6 +23,20 @@ export function usePayments() {
     
     setLoading(true)
     try {
+      if (TEST_MODE) {
+        // Simulate successful payment in test mode
+        toast({
+          title: 'Pagamento simulado',
+          description: 'Em modo de teste, o pagamento foi simulado com sucesso.',
+          variant: 'default'
+        })
+        // Redirect to success page after a delay
+        setTimeout(() => {
+          window.location.href = `${window.location.origin}/billing/success`
+        }, 1500)
+        return
+      }
+
       const { data, error } = await supabase.functions.invoke('create-checkout-session', {
         body: {
           priceId,
@@ -63,6 +78,20 @@ export function usePayments() {
     
     setLoading(true)
     try {
+      if (TEST_MODE) {
+        // Simulate portal access in test mode
+        toast({
+          title: 'Portal simulado',
+          description: 'Em modo de teste, o portal de pagamentos foi simulado.',
+          variant: 'default'
+        })
+        // Redirect to billing page
+        setTimeout(() => {
+          window.location.href = `${window.location.origin}/billing`
+        }, 1500)
+        return
+      }
+
       const { data, error } = await supabase.functions.invoke('create-portal-session', {
         body: {
           userId: user.id,
@@ -87,9 +116,35 @@ export function usePayments() {
     }
   }
 
+  const getSubscriptionStatus = async () => {
+    if (!user) return null
+    
+    try {
+      if (TEST_MODE) {
+        // Return mock subscription data in test mode
+        return {
+          status: 'active',
+          plan: 'pro',
+          current_period_end: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+        }
+      }
+
+      const { data, error } = await supabase.functions.invoke('get-subscription-status', {
+        body: { userId: user.id }
+      })
+
+      if (error) throw error
+      return data
+    } catch (error) {
+      console.error('Erro ao obter status da assinatura:', error)
+      return null
+    }
+  }
+
   return {
     createCheckoutSession,
     createPortalSession,
+    getSubscriptionStatus,
     loading
   }
 }

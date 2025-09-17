@@ -1,6 +1,6 @@
 // Utilities for safe array and object operations to prevent crashes
 
-export function safeProp<T>(obj: any, key: string, defaultValue: T): T {
+export function safeProp<T>(obj: Record<string, unknown> | null | undefined, key: string, defaultValue: T): T {
   try {
     return obj && typeof obj === 'object' && key in obj ? obj[key] : defaultValue;
   } catch {

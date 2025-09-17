@@ -5,7 +5,7 @@ import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { Quiz, QuizAnswer, Result, Lead } from '@/types/quiz';
+import { Quiz, QuizAnswer, Result, Lead, Achievement } from '@/types/quiz';
 import { loadQuizByPublicId, saveResult, saveLead } from '@/lib/quizzes';
 import { FakeProgressBar } from '@/components/quiz/FakeProgressBar';
 import { Star, ArrowRight, Trophy, Zap, Target } from 'lucide-react';
@@ -32,8 +32,8 @@ const QuizRunner = () => {
   const [stepStartTime, setStepStartTime] = useState<number>(Date.now());
   const [userAnswerTimes, setUserAnswerTimes] = useState<number[]>([]);
   const [answeredStepsCount, setAnsweredStepsCount] = useState(0);
-  const [achievements, setAchievements] = useState<any[]>([]);
-  const [showAchievement, setShowAchievement] = useState<any>(null);
+  const [achievements, setAchievements] = useState<Achievement[]>([]);
+  const [showAchievement, setShowAchievement] = useState<Achievement | null>(null);
   const [showSplash, setShowSplash] = useState(isMobile);
   const [dataReady, setDataReady] = useState(false);
   const [showGestureHint, setShowGestureHint] = useState(isMobile && !localStorage.getItem('gesture-hint-shown'));
@@ -139,7 +139,7 @@ const QuizRunner = () => {
   const currentQuestion = quiz?.questions?.[currentStep];
   const progress = quiz?.questions?.length ? (answeredStepsCount / quiz.questions.length) * 100 : 0;
 
-  const handleAnswer = async (value: any) => {
+  const handleAnswer = async (value: unknown) => {
     if (!currentQuestion) return;
     
     // Calculate time spent on this step
@@ -244,7 +244,7 @@ const QuizRunner = () => {
     const totalTime = answerTimes.reduce((sum, time) => sum + time, 0);
     const avgTimePerQuestion = totalTime / answerTimes.length;
     
-    const newAchievements: any[] = [];
+    const newAchievements: Achievement[] = [];
     
     // Perfect Score Achievement
     if (score >= 100) {

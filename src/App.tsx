@@ -1,7 +1,9 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from '@/components/ui/toaster';
-import { TooltipProvider } from '@/components/ui/tooltip';
+// import { StrictMode } from 'react';
+// import { TooltipProvider } from '@/components/ui/tooltip';
 import { AuthProvider } from '@/contexts/AuthProvider';
+
 import { StripeProvider } from '@/contexts/StripeProvider';
 import { Billing } from '@/pages/Billing';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
@@ -21,7 +23,6 @@ const App = () => {
     <BrowserRouter>
       <AuthProvider>
         <StripeProvider>
-          <TooltipProvider delayDuration={0}>
           <Routes>
           {/* Public routes */}
           <Route path="/" element={<IndexSimple />} />
@@ -32,6 +33,11 @@ const App = () => {
           
           {/* Protected routes */}
           <Route path="/app" element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          } />
+          <Route path="/app/dashboard" element={
             <ProtectedRoute>
               <Dashboard />
             </ProtectedRoute>
@@ -71,9 +77,8 @@ const App = () => {
               <Billing />
             </ProtectedRoute>
           } />
-        </Routes>
+          </Routes>
           <Toaster />
-          </TooltipProvider>
         </StripeProvider>
       </AuthProvider>
     </BrowserRouter>

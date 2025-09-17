@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import type { Quiz, Result } from '@/types/quiz';
 
 // Quiz validation schema
 export const QuizSchema = z.object({
@@ -61,7 +62,7 @@ export const ResultSchema = z.object({
 });
 
 // Validation helper functions
-export const validateQuiz = (quiz: any) => {
+export const validateQuiz = (quiz: unknown): Quiz => {
   try {
     return QuizSchema.parse(quiz);
   } catch (error) {
@@ -70,7 +71,7 @@ export const validateQuiz = (quiz: any) => {
   }
 };
 
-export const validateResult = (result: any) => {
+export const validateResult = (result: unknown): Result => {
   try {
     return ResultSchema.parse(result);
   } catch (error) {
@@ -80,7 +81,7 @@ export const validateResult = (result: any) => {
 };
 
 // Safe data retrieval helpers
-export const safeGetQuizData = (data: any) => {
+export const safeGetQuizData = (data: unknown): Partial<Quiz> | null => {
   if (!data) return null;
   
   // Provide safe defaults
@@ -100,7 +101,7 @@ export const safeGetQuizData = (data: any) => {
   };
 };
 
-export const safeGetResultData = (data: any) => {
+export const safeGetResultData = (data: unknown): Partial<Result> | null => {
   if (!data) return null;
   
   return {

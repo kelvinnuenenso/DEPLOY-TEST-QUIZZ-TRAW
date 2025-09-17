@@ -9,7 +9,7 @@ export const initSentry = () => {
       
       // Configurações de performance
       tracesSampleRate: 0.2,
-      tracePropagationTargets: ['localhost', /^https:\/\/[^\/]+\.quizliftoff\.com/],
+      tracePropagationTargets: ['localhost', /^https:\/\/[^/]+\.quizliftoff\.com/],
       
       // Configurações de ambiente
       environment: import.meta.env.MODE,
@@ -48,7 +48,7 @@ export const initSentry = () => {
 };
 
 // Função para capturar erros com contexto adicional
-export const captureError = (error: Error, context?: Record<string, any>) => {
+export const captureError = (error: Error, context?: Record<string, unknown>) => {
   if (import.meta.env.PROD) {
     Sentry.withScope((scope) => {
       if (context) {
@@ -64,7 +64,7 @@ export const captureError = (error: Error, context?: Record<string, any>) => {
 };
 
 // Função para capturar eventos personalizados
-export const captureEvent = (name: string, data?: Record<string, any>) => {
+export const captureEvent = (name: string, data?: Record<string, unknown>) => {
   if (import.meta.env.PROD) {
     Sentry.captureEvent({
       message: name,
@@ -77,7 +77,7 @@ export const captureEvent = (name: string, data?: Record<string, any>) => {
 };
 
 // Função para adicionar breadcrumb personalizado
-export const addBreadcrumb = (message: string, category: string, data?: Record<string, any>) => {
+export const addBreadcrumb = (message: string, category: string, data?: Record<string, unknown>) => {
   if (import.meta.env.PROD) {
     Sentry.addBreadcrumb({
       message,
@@ -120,7 +120,7 @@ export const setTags = (tags: Record<string, string>) => {
 };
 
 // Função para medir performance
-export const measurePerformance = (name: string, operation: () => Promise<any>) => {
+export const measurePerformance = <T>(name: string, operation: () => Promise<T>) => {
   if (import.meta.env.PROD) {
     const transaction = Sentry.startTransaction({
       name,

@@ -13,8 +13,8 @@ interface PlatformData {
   platform: string;
   title: string;
   description?: string;
-  questions: any[];
-  rawData: any;
+  questions: Question[];
+  rawData: Record<string, unknown>;
 }
 
 export class ImportService {
@@ -40,7 +40,7 @@ static async testApiKey(apiKey: string): Promise<boolean> {
         'Authorization': `Bearer ${apiKey}`
       },
       body: JSON.stringify({ test: true })
-    }).catch(() => null as any);
+    }).catch(() => null as Response | null);
     return res ? res.ok : true;
   } catch (error) {
     console.error('Error testing API key:', error);
@@ -102,7 +102,7 @@ static async importQuiz(url: string): Promise<ImportResult> {
   }
 }
 
-  private static parseScrapedData(url: string, data: any): PlatformData | null {
+  private static parseScrapedData(url: string, data: Record<string, unknown>): PlatformData | null {
     const { markdown, html } = data;
     
     // Detect platform
@@ -135,7 +135,7 @@ static async importQuiz(url: string): Promise<ImportResult> {
       const title = titleMatch ? titleMatch[1].trim() : 'Quiz Importado do Typeform';
 
       // Extract questions from markdown
-      const questions: any[] = [];
+      const questions: Omit<Question, 'id'>[] = [];
       const questionMatches = markdown.match(/(\d+\.\s+.+?)(?=\d+\.\s+|\n\n|$)/gs) || [];
       
       questionMatches.forEach((match, index) => {
@@ -143,7 +143,7 @@ static async importQuiz(url: string): Promise<ImportResult> {
         const questionText = lines[0].replace(/^\d+\.\s+/, '');
         
         // Look for options (- bullets or letters)
-        const options: any[] = [];
+        const options: { text: string; isCorrect: boolean }[] = [];
         const optionMatches = lines.slice(1).filter(line => 
           line.trim().match(/^[-*]\s+/) || line.trim().match(/^[a-zA-Z]\)\s+/)
         );
@@ -188,7 +188,7 @@ static async importQuiz(url: string): Promise<ImportResult> {
                         html.match(/<h1[^>]*>([^<]+)<\/h1>/i);
       const title = titleMatch ? titleMatch[1].trim() : 'Quiz Importado do Google Forms';
 
-      const questions: any[] = [];
+      const questions: Omit<Question, 'id'>[] = [];
       
       // Look for question patterns in markdown
       const questionPattern = /(\d+\.\s+.+?)(?=\d+\.\s+|\n\n|$)/gs;
@@ -198,7 +198,7 @@ static async importQuiz(url: string): Promise<ImportResult> {
         const lines = match.trim().split('\n');
         const questionText = lines[0].replace(/^\d+\.\s+/, '');
         
-        const options: any[] = [];
+        const options: { id: string; label: string; score: number }[] = [];
         lines.slice(1).forEach((line, index) => {
           const optionMatch = line.match(/^[-*○●]\s+(.+)/);
           if (optionMatch) {
@@ -237,7 +237,7 @@ static async importQuiz(url: string): Promise<ImportResult> {
                         markdown.match(/^#\s+(.+)/m);
       const title = titleMatch ? titleMatch[1].trim() : 'Quiz Importado do Microsoft Forms';
 
-      const questions: any[] = [];
+      const questions: Omit<Question, 'id'>[] = [];
       
       // Basic parsing for Microsoft Forms
       const questionMatches = markdown.match(/(\d+\.\s+.+?)(?=\d+\.\s+|\n\n|$)/gs) || [];
@@ -275,7 +275,7 @@ static async importQuiz(url: string): Promise<ImportResult> {
                         markdown.match(/^#\s+(.+)/m);
       const title = titleMatch ? titleMatch[1].trim() : 'Quiz Importado';
 
-      const questions: any[] = [];
+      const questions: Omit<Question, 'id'>[] = [];
       
       // Look for form inputs in HTML
       const inputMatches = html.match(/<input[^>]+type=["'](?:text|email|radio|checkbox)[^>]*>/gi) || [];

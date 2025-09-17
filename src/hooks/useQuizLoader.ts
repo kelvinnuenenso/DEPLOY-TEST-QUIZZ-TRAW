@@ -279,7 +279,7 @@ export function useQuizLoader(quiz: Quiz, config: QuizLoaderConfig = defaultConf
   const autoLoadQuizContent = (quiz: Quiz): Quiz => {
     setIsLoading(true);
 
-    let updatedQuiz = { ...quiz };
+    const updatedQuiz = { ...quiz };
 
     // 1. Aplicar tema automaticamente
     if (config.autoApplyTheme) {

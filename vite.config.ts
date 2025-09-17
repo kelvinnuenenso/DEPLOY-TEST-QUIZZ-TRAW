@@ -7,10 +7,16 @@ import { sentryVitePlugin } from "@sentry/vite-plugin";
 export default defineConfig(({ mode }) => ({
   server: {
     host: "localhost",
-    port: 8081,
+    port: 3000,
     hmr: {
       host: "localhost",
-      port: 8081
+      port: 3000
+    },
+    force: true,
+    headers: {
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '0'
     }
   },
   plugins: [
@@ -27,7 +33,25 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      'react': path.resolve(__dirname, './node_modules/react'),
+      'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
+      '@radix-ui/react-tooltip': path.resolve(__dirname, './src/lib/empty-module.js'),
+      'react-helmet-async': path.resolve(__dirname, './src/lib/empty-module.js'),
     },
+  },
+  optimizeDeps: {
+    force: true,
+    include: ['react', 'react-dom'],
+    exclude: ['@radix-ui/react-tooltip', 'react-helmet-async'],
+    esbuildOptions: {
+      define: {
+        global: 'globalThis'
+      }
+    }
+  },
+  clearScreen: false,
+  define: {
+    'process.env.NODE_ENV': JSON.stringify(mode)
   },
   build: {
     sourcemap: true,

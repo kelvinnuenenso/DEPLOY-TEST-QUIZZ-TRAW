@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import useAuth from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/useAuth';
 import { WebhookService, Webhook, Integration, WebhookEvent } from '@/lib/webhookService';
 import { PlanManager } from '@/lib/planManager';
 import { Button } from '@/components/ui/button';
@@ -51,17 +51,17 @@ export function WebhooksIntegrations() {
         setCanUseWebhooks(canUse);
         
         if (canUse) {
-          // Carregar webhooks e integrações
+          // Carregar webhooks e integrações existentes
           const [webhooksData, integrationsData] = await Promise.all([
-            WebhookService.listWebhooks(user.id),
-            WebhookService.listIntegrations(user.id)
+            WebhookService.getWebhooks(user.id),
+            WebhookService.getIntegrations(user.id)
           ]);
           
           setWebhooks(webhooksData);
           setIntegrations(integrationsData);
         }
       } catch (error) {
-        console.error('Error loading webhooks/integrations:', error);
+        console.error('Erro ao carregar dados de webhooks:', error);
       } finally {
         setLoading(false);
       }
@@ -69,6 +69,87 @@ export function WebhooksIntegrations() {
     
     loadData();
   }, [user]);
+  
+  const availableEvents: WebhookEvent[] = [
+    'quiz_completed',
+    'lead_captured', 
+    'quiz_started',
+    'quiz_abandoned',
+    'result_viewed'
+  ];
+  
+  const integrationTypes = [
+    { value: 'mailchimp', label: 'Mailchimp', description: 'Adicionar leads às suas listas' },
+    { value: 'zapier', label: 'Zapier', description: 'Conectar com 5000+ aplicativos' },
+    { value: 'google_sheets', label: 'Google Sheets', description: 'Salvar dados em planilhas' },
+    { value: 'hubspot', label: 'HubSpot', description: 'CRM e automação de marketing' },
+    { value: 'custom', label: 'Webhook Customizado', description: 'Sua própria URL de webhook' }
+  ];
+  
+  // Função handleSaveWebhook será definida mais abaixo
+  
+  // Função handleDeleteWebhook será definida mais abaixo
+  
+  // Função handleSaveIntegration será definida mais abaixo
+  
+
+  
+  const resetWebhookForm = () => {
+    setWebhookName('');
+    setWebhookUrl('');
+    setWebhookEvents([]);
+    setWebhookActive(true);
+    setEditingWebhook(null);
+  };
+  
+  const resetIntegrationForm = () => {
+    setIntegrationName('');
+    setIntegrationType('mailchimp');
+    setIntegrationConfig({});
+    setIntegrationActive(true);
+    setEditingIntegration(null);
+  };
+  
+  const openEditWebhook = (webhook: Webhook) => {
+    setEditingWebhook(webhook);
+    setWebhookName(webhook.name);
+    setWebhookUrl(webhook.url);
+    setWebhookEvents(webhook.events);
+    setWebhookActive(webhook.active);
+    setWebhookDialogOpen(true);
+  };
+  
+  const openEditIntegration = (integration: Integration) => {
+    setEditingIntegration(integration);
+    setIntegrationName(integration.name);
+    setIntegrationType(integration.type);
+    setIntegrationConfig(integration.config);
+    setIntegrationActive(integration.active);
+    setIntegrationDialogOpen(true);
+  };
+  
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+  
+  if (!canUseWebhooks) {
+    return (
+      <Alert>
+        <AlertCircle className="h-4 w-4" />
+        <AlertTitle>Recurso Premium</AlertTitle>
+        <AlertDescription>
+          Webhooks e integrações estão disponíveis apenas nos planos Pro e Enterprise.
+          <Button variant="link" className="p-0 h-auto ml-2">
+            Fazer upgrade do plano
+          </Button>
+        </AlertDescription>
+      </Alert>
+    );
+  }
 
   // Manipuladores para webhooks
   const handleOpenWebhookDialog = (webhook?: Webhook) => {

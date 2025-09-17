@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug - Lista de Quizzes</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f8fafc;
+        }
+        .container {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 12px;
+            border-radius: 8px;
+            margin: 16px 0;
+            font-weight: 500;
+        }
+        .success { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+        .error { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+        .info { background: #eff6ff; color: #1d4ed8; border: 1px solid #dbeafe; }
+        .quiz-item {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 12px 0;
+        }
+        .btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 4px;
+        }
+        .btn:hover { background: #2563eb; }
+        .btn-outline {
+            background: transparent;
+            color: #3b82f6;
+            border: 1px solid #3b82f6;
+        }
+        .btn-outline:hover {
+            background: #3b82f6;
+            color: white;
+        }
+        pre {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 16px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Debug - Lista de Quizzes</h1>
+        <p>Esta ferramenta ajuda a diagnosticar problemas com o botão 'Editar' no dashboard.</p>
+        
+        <div id="status"></div>
+        
+        <div style="margin: 20px 0;">
+            <button class="btn" onclick="checkQuizzes()">🔄 Verificar Quizzes</button>
+            <button class="btn btn-outline" onclick="createTestQuiz()">➕ Criar Quiz de Teste</button>
+            <button class="btn btn-outline" onclick="clearStorage()">🗑️ Limpar Storage</button>
+            <button class="btn btn-outline" onclick="goToDashboard()">📊 Ir para Dashboard</button>
+        </div>
+        
+        <div id="results"></div>
+        
+        <div id="quizList"></div>
+    </div>
+
+    <script>
+        function showStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('status');
+            statusDiv.innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+
+        function checkQuizzes() {
+            showStatus('🔍 Verificando quizzes no localStorage...', 'info');
+            
+            try {
+                // Verificar localStorage
+                const quizzesData = localStorage.getItem('quizzes');
+                const authData = localStorage.getItem('auth');
+                
+                let results = '<h3>📋 Resultados da Verificação:</h3>';
+                
+                // Verificar autenticação
+                if (authData) {
+                    const auth = JSON.parse(authData);
+                    results += `<div class="status success">✅ Usuário autenticado: ${auth.user?.email || 'Email não encontrado'}</div>`;
+                } else {
+                    results += '<div class="status error">❌ Usuário não autenticado</div>';
+                }
+                
+                // Verificar quizzes
+                if (quizzesData) {
+                    const quizzes = JSON.parse(quizzesData);
+                    results += `<div class="status success">✅ ${quizzes.length} quiz(zes) encontrado(s)</div>`;
+                    
+                    // Listar quizzes
+                    if (quizzes.length > 0) {
+                        results += '<h4>📝 Lista de Quizzes:</h4>';
+                        quizzes.forEach((quiz, index) => {
+                            results += `
+                                <div class="quiz-item">
+                                    <strong>${quiz.name || 'Sem nome'}</strong><br>
+                                    <small>ID: ${quiz.id}</small><br>
+                                    <small>Status: ${quiz.status || 'draft'}</small><br>
+                                    <small>Perguntas: ${quiz.questions?.length || 0}</small><br>
+                                    <button class="btn btn-outline" onclick="testEditButton('${quiz.id}')">🔗 Testar Editar</button>
+                                </div>
+                            `;
+                        });
+                    }
+                } else {
+                    results += '<div class="status error">❌ Nenhum quiz encontrado no localStorage</div>';
+                }
+                
+                // Mostrar dados brutos
+                results += '<h4>🔧 Dados Brutos:</h4>';
+                results += `<pre>localStorage.quizzes: ${quizzesData || 'null'}</pre>`;
+                results += `<pre>localStorage.auth: ${authData || 'null'}</pre>`;
+                
+                document.getElementById('results').innerHTML = results;
+                showStatus('✅ Verificação concluída!', 'success');
+                
+            } catch (error) {
+                showStatus(`❌ Erro na verificação: ${error.message}`, 'error');
+                console.error('Erro:', error);
+            }
+        }
+
+        function createTestQuiz() {
+            showStatus('➕ Criando quiz de teste...', 'info');
+            
+            try {
+                const testQuiz = {
+                    id: 'test-quiz-' + Date.now(),
+                    publicId: Math.random().toString(36).slice(2, 8),
+                    name: 'Quiz de Teste - Debug',
+                    description: 'Quiz criado para testar o botão Editar',
+                    status: 'draft',
+                    theme: {
+                        primary: '#2563EB',
+                        background: '#FFFFFF',
+                        text: '#0B0B0B'
+                    },
+                    settings: {
+                        progressBar: true,
+                        requireEmail: false
+                    },
+                    questions: [{
+                        id: 'q1',
+                        idx: 1,
+                        type: 'single',
+                        title: 'Esta é uma pergunta de teste?',
+                        description: 'Pergunta criada para debug',
+                        options: [
+                            { id: '1', label: 'Sim', score: 10 },
+                            { id: '2', label: 'Não', score: 5 }
+                        ],
+                        required: true
+                    }],
+                    outcomes: {
+                        default: {
+                            title: 'Obrigado!',
+                            description: 'Quiz de teste concluído.',
+                            cta: { label: 'OK', href: '#' }
+                        }
+                    },
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString(),
+                    userId: 'test-user'
+                };
+                
+                // Adicionar ao localStorage
+                const existingQuizzes = JSON.parse(localStorage.getItem('quizzes') || '[]');
+                existingQuizzes.push(testQuiz);
+                localStorage.setItem('quizzes', JSON.stringify(existingQuizzes));
+                
+                showStatus('✅ Quiz de teste criado com sucesso!', 'success');
+                checkQuizzes(); // Atualizar a lista
+                
+            } catch (error) {
+                showStatus(`❌ Erro ao criar quiz: ${error.message}`, 'error');
+            }
+        }
+
+        function testEditButton(quizId) {
+            showStatus(`🔗 Testando navegação para /app/edit/${quizId}...`, 'info');
+            
+            // Simular o clique do botão Editar
+            const editUrl = `/app/edit/${quizId}`;
+            
+            // Abrir em nova aba para teste
+            window.open(editUrl, '_blank');
+            
+            showStatus(`✅ Tentativa de navegação para ${editUrl}`, 'success');
+        }
+
+        function clearStorage() {
+            if (confirm('Tem certeza que deseja limpar o localStorage? Isso removerá todos os quizzes.')) {
+                localStorage.removeItem('quizzes');
+                showStatus('🗑️ localStorage limpo!', 'info');
+                checkQuizzes();
+            }
+        }
+
+        function goToDashboard() {
+            window.open('/app/dashboard', '_blank');
+        }
+
+        // Verificar automaticamente ao carregar
+        window.onload = function() {
+            checkQuizzes();
+        };
+    </script>
+</body>
+</html>

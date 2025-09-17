@@ -31,7 +31,7 @@ export function SmartPropertyPanel({
 }: SmartPropertyPanelProps) {
   const [activeTab, setActiveTab] = useState('content');
 
-  const handleContentUpdate = useCallback((field: string, value: any) => {
+  const handleContentUpdate = useCallback((field: string, value: unknown) => {
     if (!component) return;
     
     onUpdate(component.id, {
@@ -42,7 +42,7 @@ export function SmartPropertyPanel({
     });
   }, [component, onUpdate]);
 
-  const handleStyleUpdate = useCallback((field: string, value: any) => {
+  const handleStyleUpdate = useCallback((field: string, value: unknown) => {
     if (!component) return;
     
     onUpdate(component.id, {
@@ -53,7 +53,7 @@ export function SmartPropertyPanel({
     });
   }, [component, onUpdate]);
 
-  const handleArrayUpdate = useCallback((field: string, index: number, value: any) => {
+  const handleArrayUpdate = useCallback((field: string, index: number, value: unknown) => {
     if (!component) return;
     
     const currentArray = component.content[field] || [];
@@ -63,7 +63,7 @@ export function SmartPropertyPanel({
     handleContentUpdate(field, newArray);
   }, [component, handleContentUpdate]);
 
-  const handleArrayAdd = useCallback((field: string, defaultItem: any) => {
+  const handleArrayAdd = useCallback((field: string, defaultItem: unknown) => {
     if (!component) return;
     
     const currentArray = component.content[field] || [];
@@ -74,7 +74,7 @@ export function SmartPropertyPanel({
     if (!component) return;
     
     const currentArray = component.content[field] || [];
-    const newArray = currentArray.filter((_: any, i: number) => i !== index);
+    const newArray = currentArray.filter((_: unknown, i: number) => i !== index);
     handleContentUpdate(field, newArray);
   }, [component, handleContentUpdate]);
 
@@ -283,7 +283,7 @@ export function SmartPropertyPanel({
               </div>
               
               <div className="space-y-2">
-                {(component.content?.options || []).map((option: any, index: number) => (
+                {(component.content?.options || []).map((option: { id?: string; label?: string }, index: number) => (
                   <div key={option.id || index} className="flex items-center gap-2">
                     <Input
                       value={option.label || ''}

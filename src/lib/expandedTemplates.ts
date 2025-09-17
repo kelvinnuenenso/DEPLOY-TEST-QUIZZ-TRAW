@@ -1,4 +1,4 @@
-import { QuestionType } from '@/types/quiz';
+import { QuestionType, Question, QuizTheme } from '@/types/quiz';
 import { 
   Target, Users, TrendingUp, Heart, Brain, Briefcase, 
   Zap, Star, Award, Gift, ShoppingCart, Gamepad2,
@@ -10,21 +10,27 @@ import {
   Rocket, Trophy, Gem, Crown, Flame, Sun, Moon
 } from 'lucide-react';
 
+interface Outcome {
+  title: string;
+  description: string;
+  cta?: { label: string; href: string };
+}
+
 export interface ExpandedQuizTemplate {
   id: string;
   name: string;
   description: string;
   category: string;
   subcategory?: string;
-  icon: React.ComponentType<any>;
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   difficulty: 'Iniciante' | 'Intermediário' | 'Avançado';
   estimatedTime: string;
   tags: string[];
   useCase: string;
   targetAudience: string;
-  questions: any[];
-  outcomes: Record<string, any>;
-  theme: any;
+  questions: Question[];
+  outcomes: Record<string, Outcome>;
+  theme: QuizTheme;
   isPopular?: boolean;
   isPremium?: boolean;
 }

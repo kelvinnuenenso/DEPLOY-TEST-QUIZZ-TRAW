@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Quiz, Question, Answer } from '@/types/quiz';
 import { BranchingLogic, BranchingRule } from '@/lib/branchingLogic';
-import useAuth from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/useAuth';
 import { PlanManager } from '@/lib/planManager';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';

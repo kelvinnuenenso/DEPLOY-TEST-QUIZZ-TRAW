@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+// Tooltips removidos para resolver problemas de React
 import { useToast } from '@/hooks/use-toast';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Facebook, Link, Code2, Info, Plus, Trash2 } from 'lucide-react';
@@ -254,16 +254,9 @@ export const PixelsManager = ({ pixelSettings, onUpdate, quizPublicId }: PixelsM
             <div className="flex items-center gap-2 mb-2">
               <label className="text-sm font-medium">ID do Pixel do Facebook</label>
               {!isMobile && (
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <Info className="w-4 h-4 text-muted-foreground" />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Encontre seu ID do pixel no Gerenciador de Eventos do Facebook</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Encontre seu ID do pixel no Gerenciador de Eventos do Facebook
+                </p>
               )}
             </div>
             <Input
@@ -330,16 +323,9 @@ export const PixelsManager = ({ pixelSettings, onUpdate, quizPublicId }: PixelsM
                             <label htmlFor={event.name} className="text-sm font-medium">
                               {event.label}
                             </label>
-                            <TooltipProvider>
-                              <Tooltip>
-                                <TooltipTrigger>
-                                  <Info className="w-3 h-3 text-muted-foreground" />
-                                </TooltipTrigger>
-                                <TooltipContent className="max-w-xs">
-                                  <p className="text-xs">{event.description}</p>
-                                </TooltipContent>
-                              </Tooltip>
-                            </TooltipProvider>
+                            <span className="text-xs text-muted-foreground bg-muted px-1 py-0.5 rounded">
+                              {event.description}
+                            </span>
                           </div>
                           <p className="text-xs text-muted-foreground">
                             <span className="font-medium">Disparo:</span> {event.trigger}
@@ -545,16 +531,9 @@ export const PixelsManager = ({ pixelSettings, onUpdate, quizPublicId }: PixelsM
             <div className="flex items-center gap-2 mb-2">
               <label className="text-sm font-medium">Código do UTMify</label>
               {!isMobile && (
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <Info className="w-4 h-4 text-muted-foreground" />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Cole aqui o código completo do UTMify para adicionar UTMs automaticamente</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Cole aqui o código completo do UTMify para adicionar UTMs automaticamente
+                </p>
               )}
             </div>
             <Textarea
@@ -613,16 +592,9 @@ export const PixelsManager = ({ pixelSettings, onUpdate, quizPublicId }: PixelsM
             <div className="flex items-center gap-2 mb-2">
               <label className="text-sm font-medium">Código do Pixel</label>
               {!isMobile && (
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <Info className="w-4 h-4 text-muted-foreground" />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Cole aqui o código JavaScript do seu pixel ou script de rastreamento</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Cole aqui o código JavaScript do seu pixel ou script de rastreamento
+                </p>
               )}
             </div>
             <Textarea

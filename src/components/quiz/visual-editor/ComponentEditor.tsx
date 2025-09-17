@@ -38,7 +38,7 @@ export function ComponentEditor({
 }: ComponentEditorProps) {
   const [activeTab, setActiveTab] = useState('content');
 
-  const updateContent = (updates: any) => {
+  const updateContent = (updates: Partial<Component['content']>) => {
     onUpdate({
       content: { ...component.content, ...updates },
       // Preserve writtenResponse if being updated
@@ -153,7 +153,7 @@ export function ComponentEditor({
                         <div className="flex gap-2">
                           <Select
                             value={condition.type}
-                            onValueChange={(value: any) => updateCondition(index, { type: value })}
+                            onValueChange={(value: string) => updateCondition(index, { type: value })}
                           >
                             <SelectTrigger className="flex-1">
                               <SelectValue />
@@ -180,7 +180,7 @@ export function ComponentEditor({
                           />
                           <Select
                             value={condition.operator}
-                            onValueChange={(value: any) => updateCondition(index, { operator: value })}
+                            onValueChange={(value: string) => updateCondition(index, { operator: value })}
                           >
                             <SelectTrigger>
                               <SelectValue />
@@ -219,7 +219,7 @@ export function ComponentEditor({
 }
 
 // Função para renderizar editor de ramificação/funil
-function renderBranchingEditor(component: Component, updateContent: (updates: any) => void) {
+function renderBranchingEditor(component: Component, updateContent: (updates: Partial<Component['content']>) => void) {
   // Só exibir para componentes que suportam múltiplas escolhas
   if (component.type !== 'multiple_choice' && !component.content.options) {
     return (
@@ -267,7 +267,7 @@ function renderBranchingEditor(component: Component, updateContent: (updates: an
 }
 
 // Função para renderizar editor de conteúdo específico por tipo
-function renderContentEditor(component: Component, updateContent: (updates: any) => void, onUpdate: (updates: Partial<Component>) => void) {
+function renderContentEditor(component: Component, updateContent: (updates: Partial<Component['content']>) => void, onUpdate: (updates: Partial<Component>) => void) {
   switch (component.type) {
     case 'text':
       return (
@@ -521,7 +521,7 @@ function renderContentEditor(component: Component, updateContent: (updates: any)
                   <Label htmlFor="written-validation">Tipo de validação</Label>
                   <Select
                     value={writtenConfig.validation || 'none'}
-                    onValueChange={(value: any) => updateWrittenResponse({ validation: value })}
+                    onValueChange={(value: string) => updateWrittenResponse({ validation: value })}
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -576,7 +576,7 @@ function renderContentEditor(component: Component, updateContent: (updates: any)
             </div>
             
             <div className="space-y-3">
-              {(component.content.options || []).map((option: any, index: number) => (
+              {(component.content.options || []).map((option: { id: string; label: string }, index: number) => (
                 <div key={option.id} className="flex gap-2">
                   <Input
                     value={option.label}
@@ -591,7 +591,7 @@ function renderContentEditor(component: Component, updateContent: (updates: any)
                     variant="outline"
                     size="sm"
                     onClick={() => {
-                      const filteredOptions = (component.content.options || []).filter((_: any, i: number) => i !== index);
+                      const filteredOptions = (component.content.options || []).filter((_: unknown, i: number) => i !== index);
                       updateContent({ options: filteredOptions });
                     }}
                   >

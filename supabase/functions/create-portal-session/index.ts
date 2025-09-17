@@ -24,12 +24,12 @@ serve(async (req) => {
     )
 
     const { data: user, error: userError } = await supabaseAdmin
-      .from('users')
-      .select('stripe_customer_id')
+      .from('user_profiles')
+      .select('subscription_id')
       .eq('id', userId)
       .single()
 
-    if (userError || !user?.stripe_customer_id) {
+    if (userError || !user?.subscription_id) {
       return new Response(
         JSON.stringify({ error: 'Cliente não encontrado' }),
         { status: 404, headers: { 'Content-Type': 'application/json' } }
@@ -37,7 +37,7 @@ serve(async (req) => {
     }
 
     const session = await stripe.billingPortal.sessions.create({
-      customer: user.stripe_customer_id,
+      customer: user.subscription_id,
       return_url: returnUrl,
       configuration: Deno.env.get('STRIPE_PORTAL_CONFIGURATION_ID')
     })

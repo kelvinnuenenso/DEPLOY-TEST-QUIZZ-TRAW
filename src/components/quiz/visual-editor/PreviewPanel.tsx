@@ -9,7 +9,7 @@ import { Star, Heart, Zap } from 'lucide-react';
 interface PreviewPanelProps {
   step: QuizStep;
   mode: 'desktop' | 'tablet' | 'mobile';
-  theme?: any;
+  theme?: Record<string, unknown>;
 }
 
 export function PreviewPanel({ step, mode, theme }: PreviewPanelProps) {

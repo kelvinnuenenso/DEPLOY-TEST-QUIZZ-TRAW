@@ -1,0 +1,102 @@
+# Configuração do Prometheus para QuizLiftOff
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    monitor: 'quizliftoff-monitor'
+
+# Configuração de alertas
+rule_files:
+  - "alert_rules.yml"
+
+# Configuração do Alertmanager
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          - alertmanager:9093
+
+# Configuração de scraping
+scrape_configs:
+  # Prometheus self-monitoring
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+    scrape_interval: 5s
+    metrics_path: /metrics
+
+  # Node Exporter - métricas do sistema
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['node-exporter:9100']
+    scrape_interval: 15s
+    metrics_path: /metrics
+
+  # Nginx Exporter - métricas do servidor web
+  - job_name: 'nginx-exporter'
+    static_configs:
+      - targets: ['nginx-exporter:9113']
+    scrape_interval: 15s
+    metrics_path: /metrics
+
+  # Redis Exporter - métricas do Redis
+  - job_name: 'redis-exporter'
+    static_configs:
+      - targets: ['redis-exporter:9121']
+    scrape_interval: 15s
+    metrics_path: /metrics
+
+  # Aplicação QuizLiftOff (se tiver métricas customizadas)
+  - job_name: 'quizliftoff-app'
+    static_configs:
+      - targets: ['app:80']
+    scrape_interval: 30s
+    metrics_path: /metrics
+    scrape_timeout: 10s
+
+  # Blackbox Exporter - monitoramento de endpoints
+  - job_name: 'blackbox'
+    metrics_path: /probe
+    params:
+      module: [http_2xx]
+    static_configs:
+      - targets:
+        - http://app:80/health
+        - http://app:80/
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox-exporter:9115
+
+  # Monitoramento de SSL/TLS
+  - job_name: 'blackbox-ssl'
+    metrics_path: /probe
+    params:
+      module: [tcp_connect]
+    static_configs:
+      - targets:
+        - app:443
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox-exporter:9115
+
+# Configurações de armazenamento
+storage:
+  tsdb:
+    path: /prometheus
+    retention.time: 15d
+    retention.size: 10GB
+
+# Configurações de web
+web:
+  console.libraries: /etc/prometheus/console_libraries
+  console.templates: /etc/prometheus/consoles
+  enable-lifecycle: true
+  enable-admin-api: true

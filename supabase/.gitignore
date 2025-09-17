@@ -1,0 +1,42 @@
+# Supabase
+.branches
+.temp
+.env
+.env.local
+.env.production
+
+# Logs
+*.log
+logs/
+
+# Database dumps
+*.sql.backup
+*.dump
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+
+# Secrets (nunca commitar)
+secrets.json
+*.key
+*.pem
+*.p12
+
+# Cache
+.cache/
+node_modules/
+
+# Build artifacts
+dist/
+build/

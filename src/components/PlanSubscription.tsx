@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import useAuth from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/useAuth';
 import { PaymentService, PaymentPlan, Subscription, PAYMENT_PLANS } from '@/lib/paymentService';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';

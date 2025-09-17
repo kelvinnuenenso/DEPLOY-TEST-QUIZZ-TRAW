@@ -24,7 +24,7 @@ import { EngagementManager } from '@/components/quiz/engagement/EngagementManage
 import { DemoUserManager } from '@/lib/demoUser';
 import { WebhookManager } from '@/components/integrations/WebhookManager';
 import { BranchingEditor } from '@/components/branching/BranchingEditor';
-import useAuth from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/useAuth';
 import { PlanManager } from '@/lib/planManager';
 
 import { PlanBadge } from '@/components/PlanBadge';
@@ -393,7 +393,7 @@ const QuizEditor = () => {
           </div>
 
           {/* Tabs */}
-            <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as any)} className={isMobile ? 'mt-2' : 'mt-4'}>
+            <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as string)} className={isMobile ? 'mt-2' : 'mt-4'}>
             <div className={isMobile ? 'overflow-x-auto' : ''}>
               <TabsList className={`grid w-full grid-cols-9 ${isMobile ? 'min-w-max' : 'max-w-6xl'}`}>
                 <TabsTrigger value="questions" className={`${isMobile ? 'gap-1 text-xs px-2' : 'gap-2'}`}>

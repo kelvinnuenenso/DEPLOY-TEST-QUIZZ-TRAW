@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Limpar Cache e Inicializar Dados</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f8fafc;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #1f2937;
+            margin-bottom: 20px;
+        }
+        .step {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f1f5f9;
+            border-radius: 8px;
+            border-left: 4px solid #3b82f6;
+        }
+        .button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        .button:hover {
+            background: #2563eb;
+        }
+        .success {
+            background: #10b981;
+        }
+        .success:hover {
+            background: #059669;
+        }
+        .status {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+        .status.success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #10b981;
+        }
+        .status.info {
+            background: #dbeafe;
+            color: #1e40af;
+            border: 1px solid #3b82f6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Solução para Problemas de Preview do Quiz</h1>
+        
+        <div class="step">
+            <h3>Passo 1: Limpar Cache do Navegador</h3>
+            <p>Clique no botão abaixo para limpar o localStorage e cache:</p>
+            <button class="button" onclick="clearCache()">🗑️ Limpar Cache</button>
+            <div id="clearStatus"></div>
+        </div>
+
+        <div class="step">
+            <h3>Passo 2: Inicializar Dados de Teste</h3>
+            <p>Clique no botão abaixo para criar um quiz de teste válido:</p>
+            <button class="button success" onclick="initTestData()">✨ Criar Quiz de Teste</button>
+            <div id="initStatus"></div>
+        </div>
+
+        <div class="step">
+            <h3>Passo 3: Verificar Dados</h3>
+            <p>Clique no botão abaixo para verificar se os dados foram criados corretamente:</p>
+            <button class="button" onclick="checkData()">🔍 Verificar Dados</button>
+            <div id="checkStatus"></div>
+        </div>
+
+        <div class="step">
+            <h3>Passo 4: Abrir Preview</h3>
+            <p>Após completar os passos acima, clique no botão abaixo para abrir o preview:</p>
+            <button class="button success" onclick="openPreview()">🚀 Abrir Preview</button>
+        </div>
+    </div>
+
+    <script>
+        function showStatus(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            element.innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+
+        function clearCache() {
+            try {
+                // Limpar localStorage
+                localStorage.clear();
+                
+                // Limpar sessionStorage
+                sessionStorage.clear();
+                
+                // Tentar limpar cache do service worker se existir
+                if ('serviceWorker' in navigator) {
+                    navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                        for(let registration of registrations) {
+                            registration.unregister();
+                        }
+                    });
+                }
+                
+                showStatus('clearStatus', '✅ Cache limpo com sucesso!', 'success');
+            } catch (error) {
+                showStatus('clearStatus', '❌ Erro ao limpar cache: ' + error.message, 'error');
+            }
+        }
+
+        function initTestData() {
+            try {
+                const testQuiz = {
+                    id: 'test-quiz',
+                    name: 'Quiz de Teste',
+                    description: 'Um quiz de exemplo para testar o sistema',
+                    publicId: 'test-quiz-public',
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString(),
+                    userId: 'test-user',
+                    questions: [
+                        {
+                            id: 'q1',
+                            title: 'Qual é sua cor favorita?',
+                            type: 'single',
+                            required: true,
+                            options: [
+                                { id: 'opt1', label: 'Azul', score: 10, value: 'blue' },
+                                { id: 'opt2', label: 'Verde', score: 8, value: 'green' },
+                                { id: 'opt3', label: 'Vermelho', score: 6, value: 'red' }
+                            ]
+                        },
+                        {
+                            id: 'q2',
+                            title: 'Como você se sente hoje?',
+                            type: 'slider',
+                            required: true,
+                            settings: {
+                                min: 1,
+                                max: 10,
+                                step: 1,
+                                defaultValue: 5
+                            }
+                        }
+                    ],
+                    steps: [
+                        {
+                            id: 'step-intro',
+                            name: 'Introdução',
+                            title: 'Bem-vindo ao Quiz de Teste',
+                            components: [
+                                {
+                                    id: 'comp-intro-title',
+                                    type: 'title',
+                                    content: {
+                                        text: 'Bem-vindo ao Quiz de Teste',
+                                        level: 'h1'
+                                    }
+                                },
+                                {
+                                    id: 'comp-intro-subtitle',
+                                    type: 'text',
+                                    content: {
+                                        text: 'Responda 2 perguntas e descubra seu resultado personalizado.',
+                                        style: 'subtitle'
+                                    }
+                                },
+                                {
+                                    id: 'comp-intro-button',
+                                    type: 'button',
+                                    content: {
+                                        text: 'Começar',
+                                        variant: 'primary',
+                                        action: 'next'
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            id: 'step-q1',
+                            name: 'Pergunta 1',
+                            title: 'Qual é sua cor favorita?',
+                            components: [
+                                {
+                                    id: 'comp-question-q1',
+                                    type: 'multiple_choice',
+                                    content: {
+                                        question: 'Qual é sua cor favorita?',
+                                        description: 'Escolha a cor que mais combina com você',
+                                        options: [
+                                            { id: 'opt1', label: 'Azul', score: 10, value: 'blue' },
+                                            { id: 'opt2', label: 'Verde', score: 8, value: 'green' },
+                                            { id: 'opt3', label: 'Vermelho', score: 6, value: 'red' }
+                                        ],
+                                        allowMultiple: false,
+                                        required: true
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            id: 'step-q2',
+                            name: 'Pergunta 2',
+                            title: 'Como você se sente hoje?',
+                            components: [
+                                {
+                                    id: 'comp-question-q2',
+                                    type: 'level_slider',
+                                    content: {
+                                        label: 'Como você se sente hoje?',
+                                        question: 'Como você se sente hoje?',
+                                        description: 'Use a escala de 1 a 10',
+                                        min: 1,
+                                        max: 10,
+                                        step: 1,
+                                        defaultValue: 5,
+                                        required: true
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            id: 'step-result',
+                            name: 'Resultado',
+                            title: 'Seu Resultado',
+                            components: [
+                                {
+                                    id: 'comp-result-title',
+                                    type: 'title',
+                                    content: {
+                                        text: 'Parabéns! Aqui está seu resultado:',
+                                        level: 'h2'
+                                    }
+                                },
+                                {
+                                    id: 'comp-result-text',
+                                    type: 'text',
+                                    content: {
+                                        text: 'Obrigado por participar do nosso quiz!',
+                                        style: 'normal'
+                                    }
+                                }
+                            ]
+                        }
+                    ],
+                    theme: {
+                        primary: '#2563EB',
+                        accent: '#3B82F6',
+                        background: '#FFFFFF',
+                        cardBackground: '#FFFFFF',
+                        text: '#1F2937',
+                        borderRadius: '12px',
+                        fontFamily: 'Inter, sans-serif',
+                        showProgress: true,
+                        maxWidth: 'medium'
+                    },
+                    settings: {
+                        allowBack: true,
+                        showProgress: true,
+                        randomizeQuestions: false
+                    },
+                    results: []
+                };
+
+                // Salvar no localStorage
+                const STORAGE_KEY = 'elevado_quizzes';
+                const existingQuizzes = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+                const quizIndex = existingQuizzes.findIndex(q => q.id === 'test-quiz');
+
+                if (quizIndex >= 0) {
+                    existingQuizzes[quizIndex] = testQuiz;
+                } else {
+                    existingQuizzes.push(testQuiz);
+                }
+
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(existingQuizzes));
+                showStatus('initStatus', '✅ Quiz de teste criado com sucesso!', 'success');
+            } catch (error) {
+                showStatus('initStatus', '❌ Erro ao criar quiz: ' + error.message, 'error');
+            }
+        }
+
+        function checkData() {
+            try {
+                const STORAGE_KEY = 'elevado_quizzes';
+                const quizzes = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+                const testQuiz = quizzes.find(q => q.id === 'test-quiz');
+                
+                if (testQuiz) {
+                    showStatus('checkStatus', 
+                        `✅ Quiz encontrado! Nome: "${testQuiz.name}", Steps: ${testQuiz.steps?.length || 0}, Perguntas: ${testQuiz.questions?.length || 0}`, 
+                        'success'
+                    );
+                } else {
+                    showStatus('checkStatus', '❌ Quiz de teste não encontrado. Execute o Passo 2 primeiro.', 'error');
+                }
+            } catch (error) {
+                showStatus('checkStatus', '❌ Erro ao verificar dados: ' + error.message, 'error');
+            }
+        }
+
+        function openPreview() {
+            window.open('http://localhost:3000/app/edit/test-quiz', '_blank');
+        }
+    </script>
+</body>
+</html>

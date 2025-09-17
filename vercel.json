@@ -5,8 +5,8 @@
   "framework": "vite",
   "regions": ["gru1"],
   "functions": {
-    "app/api/**/*.ts": {
-      "runtime": "nodejs18.x"
+    "api/**/*.ts": {
+      "runtime": "@vercel/node@latest"
     }
   },
   "headers": [

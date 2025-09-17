@@ -63,19 +63,19 @@ export function AdvancedPropertyPanel({
     );
   }
 
-  const updateContent = (updates: any) => {
+  const updateContent = (updates: Record<string, unknown>) => {
     onUpdate({
       content: { ...component.content, ...updates }
     });
   };
 
-  const updateStyle = (updates: any) => {
+  const updateStyle = (updates: Record<string, unknown>) => {
     onUpdate({
       style: { ...component.style, ...updates }
     });
   };
 
-  const updateAnimation = (updates: any) => {
+  const updateAnimation = (updates: Partial<Component['animation']>) => {
     onUpdate({
       animation: { ...component.animation, ...updates }
     });
@@ -148,7 +148,7 @@ export function AdvancedPropertyPanel({
 }
 
 // Content Editor Component
-function ContentEditor({ component, onUpdate }: { component: Component; onUpdate: (updates: any) => void }) {
+function ContentEditor({ component, onUpdate }: { component: Component; onUpdate: (updates: Partial<Component>) => void }) {
   const renderContentFields = () => {
     switch (component.type) {
       case 'title':
@@ -293,7 +293,7 @@ function ContentEditor({ component, onUpdate }: { component: Component; onUpdate
 }
 
 // Style Editor Component
-function StyleEditor({ component, onUpdate }: { component: Component; onUpdate: (updates: any) => void }) {
+function StyleEditor({ component, onUpdate }: { component: Component; onUpdate: (updates: Partial<Component>) => void }) {
   return (
     <div className="space-y-4">
       <Card>
@@ -402,7 +402,7 @@ function StyleEditor({ component, onUpdate }: { component: Component; onUpdate: 
 }
 
 // Layout Editor Component
-function LayoutEditor({ component, onUpdate }: { component: Component; onUpdate: (updates: any) => void }) {
+function LayoutEditor({ component, onUpdate }: { component: Component; onUpdate: (updates: Partial<Component>) => void }) {
   return (
     <Card>
       <CardHeader>
@@ -515,8 +515,8 @@ function AdvancedEditor({
   onUpdateAnimation 
 }: { 
   component: Component; 
-  onUpdate: (updates: any) => void;
-  onUpdateAnimation: (updates: any) => void;
+  onUpdate: (updates: Partial<Component>) => void;
+  onUpdateAnimation: (updates: Partial<Component['animation']>) => void;
 }) {
   return (
     <div className="space-y-4">

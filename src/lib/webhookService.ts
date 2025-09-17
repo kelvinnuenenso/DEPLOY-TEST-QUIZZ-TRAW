@@ -24,7 +24,7 @@ export type WebhookEvent =
 
 export interface WebhookPayload {
   event: WebhookEvent;
-  data: any;
+  data: Record<string, unknown>;
   timestamp: string;
 }
 
@@ -33,7 +33,7 @@ export interface Integration {
   userId: string;
   type: 'mailchimp' | 'zapier' | 'google_sheets' | 'custom';
   name: string;
-  config: Record<string, any>;
+  config: Record<string, unknown>;
   active: boolean;
   createdAt: string;
 }
@@ -195,7 +195,7 @@ export class WebhookService {
   /**
    * Dispara um evento de webhook
    */
-  static async triggerWebhook(userId: string, event: WebhookEvent, data: any): Promise<void> {
+  static async triggerWebhook(userId: string, event: WebhookEvent, data: Record<string, unknown>): Promise<void> {
     if (TEST_MODE) {
       // No modo de teste, apenas loga o evento
       console.log(`[TEST] Webhook triggered: ${event}`, data);

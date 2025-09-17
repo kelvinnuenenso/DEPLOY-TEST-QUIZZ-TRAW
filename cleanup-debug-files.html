@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Limpeza de Arquivos de Debug</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f8fafc;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #1f2937;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .file-list {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .file-item:last-child {
+            border-bottom: none;
+        }
+        .file-name {
+            font-family: monospace;
+            color: #374151;
+        }
+        .file-status {
+            font-size: 12px;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+        .status-debug {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        .status-temp {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        .status-keep {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .button {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        .button:hover {
+            background: #b91c1c;
+        }
+        .button.safe {
+            background: #059669;
+        }
+        .button.safe:hover {
+            background: #047857;
+        }
+        .info {
+            background: #f0f9ff;
+            border: 1px solid #0ea5e9;
+            color: #0c4a6e;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .warning {
+            background: #fffbeb;
+            border: 1px solid #f59e0b;
+            color: #92400e;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .status {
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: 500;
+            text-align: center;
+        }
+        .status.success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #10b981;
+        }
+        .status.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #ef4444;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧹 Limpeza de Arquivos de Debug</h1>
+        
+        <div class="info">
+            <strong>ℹ️ Análise dos Arquivos:</strong><br>
+            Durante o processo de debug, foram criados alguns arquivos HTML temporários. Aqui você pode analisá-los e decidir quais manter ou remover.
+        </div>
+
+        <div class="file-list">
+            <h3>📁 Arquivos Identificados:</h3>
+            
+            <div class="file-item">
+                <span class="file-name">clear-cache-and-init.html</span>
+                <span class="file-status status-debug">DEBUG</span>
+            </div>
+            
+            <div class="file-item">
+                <span class="file-name">debug-auth.html</span>
+                <span class="file-status status-debug">DEBUG</span>
+            </div>
+            
+            <div class="file-item">
+                <span class="file-name">create-test-user.html</span>
+                <span class="file-status status-temp">TEMPORÁRIO</span>
+            </div>
+            
+            <div class="file-item">
+                <span class="file-name">init-test-data.js</span>
+                <span class="file-status status-keep">MANTER</span>
+            </div>
+        </div>
+
+        <div class="warning">
+            <strong>⚠️ Recomendações:</strong><br><br>
+            <strong>Arquivos para REMOVER:</strong><br>
+            • <code>clear-cache-and-init.html</code> - Usado apenas para debug inicial<br>
+            • <code>debug-auth.html</code> - Ferramenta de diagnóstico temporária<br>
+            • <code>create-test-user.html</code> - Já cumpriu sua função<br><br>
+            <strong>Arquivos para MANTER:</strong><br>
+            • <code>init-test-data.js</code> - Útil para inicializar dados de teste
+        </div>
+
+        <div style="text-align: center;">
+            <button class="button" onclick="showCleanupInstructions()">🗑️ Ver Instruções de Limpeza</button>
+            <button class="button safe" onclick="testQuizCreator()">🧪 Testar Criador de Quiz</button>
+        </div>
+        
+        <div id="status"></div>
+    </div>
+
+    <script>
+        function showStatus(message, type = 'success') {
+            const statusDiv = document.getElementById('status');
+            statusDiv.innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+
+        function showCleanupInstructions() {
+            const instructions = `
+                <div class="status success">
+                    <strong>📋 Instruções de Limpeza Manual:</strong><br><br>
+                    
+                    <strong>1. Arquivos para deletar:</strong><br>
+                    • clear-cache-and-init.html<br>
+                    • debug-auth.html<br>
+                    • create-test-user.html<br>
+                    • cleanup-debug-files.html (este arquivo)<br><br>
+                    
+                    <strong>2. Como deletar:</strong><br>
+                    • Navegue até a pasta do projeto<br>
+                    • Selecione os arquivos listados acima<br>
+                    • Pressione Delete ou clique com botão direito > Excluir<br><br>
+                    
+                    <strong>3. Verificar funcionamento:</strong><br>
+                    • Acesse http://localhost:3000/app/dashboard<br>
+                    • Teste os botões "Novo Quiz" e "Editar"<br>
+                    • Confirme que o criador de quiz funciona normalmente<br><br>
+                    
+                    <strong>✅ Estes arquivos NÃO afetam o funcionamento do criador de quiz!</strong>
+                </div>
+            `;
+            showStatus(instructions, 'success');
+        }
+
+        function testQuizCreator() {
+            try {
+                // Testar acesso ao dashboard
+                const dashboardUrl = 'http://localhost:3000/app/dashboard';
+                console.log('🧪 Testando criador de quiz:', dashboardUrl);
+                
+                // Abrir em nova aba
+                const newWindow = window.open(dashboardUrl, '_blank');
+                
+                if (newWindow) {
+                    showStatus(`
+                        ✅ <strong>Teste Iniciado!</strong><br><br>
+                        1. Uma nova aba foi aberta com o dashboard<br>
+                        2. Teste o botão "Novo Quiz"<br>
+                        3. Teste o botão "Editar" em um quiz existente<br>
+                        4. Verifique se o editor de quiz carrega corretamente<br><br>
+                        <strong>Se tudo funcionar, os arquivos HTML podem ser removidos com segurança!</strong>
+                    `, 'success');
+                } else {
+                    showStatus('❌ Falha ao abrir dashboard - popup bloqueado?', 'error');
+                }
+            } catch (error) {
+                console.error('Erro no teste:', error);
+                showStatus('❌ Erro no teste: ' + error.message, 'error');
+            }
+        }
+
+        // Verificar estado inicial
+        window.addEventListener('load', () => {
+            console.log('🧹 Ferramenta de limpeza carregada');
+            
+            // Verificar se há usuário de teste
+            const testUser = localStorage.getItem('elevado_user');
+            if (testUser) {
+                showStatus(`
+                    ℹ️ <strong>Usuário de teste detectado.</strong><br>
+                    O criador de quiz deve estar funcionando normalmente.<br>
+                    Você pode remover os arquivos de debug com segurança.
+                `, 'success');
+            } else {
+                showStatus(`
+                    ⚠️ <strong>Nenhum usuário de teste encontrado.</strong><br>
+                    Execute o create-test-user.html primeiro, depois volte aqui para limpar.
+                `, 'error');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { listQuizzes, saveQuiz } from '@/lib/quizzes';
 import { localDB } from '@/lib/localStorage';
-import useAuth from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/useAuth';
 import { Quiz } from '@/types/quiz';
 import {
   Plus,

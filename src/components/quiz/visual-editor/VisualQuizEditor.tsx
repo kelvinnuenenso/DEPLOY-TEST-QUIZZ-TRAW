@@ -165,7 +165,7 @@ export function VisualQuizEditor({
             <div className="space-y-2">
               <p className="text-sm font-medium truncate">{content?.question || 'Pergunta'}</p>
               <div className="space-y-1">
-                {(content?.options || []).slice(0, 2).map((option: any, idx: number) => (
+                {(content?.options || []).slice(0, 2).map((option: { text?: string } | string, idx: number) => (
                   <div key={idx} className="flex items-center gap-2 text-xs">
                     <div className="w-3 h-3 border rounded bg-background" />
                     <span className="truncate">{option?.text || option || `Opção ${idx + 1}`}</span>
@@ -230,7 +230,7 @@ export function VisualQuizEditor({
             <div className="space-y-2">
               <p className="text-xs font-medium truncate">{content?.title || 'Galeria'}</p>
               <div className="flex gap-1 overflow-hidden">
-                {(content?.images || []).slice(0, 3).map((img: any, i: number) => (
+                {(content?.images || []).slice(0, 3).map((img: { url?: string; alt?: string } | string, i: number) => (
                   <div key={i} className="w-8 h-8 bg-muted rounded flex items-center justify-center text-xs border">
                     {i + 1}
                   </div>
@@ -277,7 +277,7 @@ export function VisualQuizEditor({
             <div className="space-y-2">
               <p className="text-xs font-medium truncate">{content?.title || 'Comparação'}</p>
               <div className="flex gap-1">
-                {(content?.items || []).slice(0, 2).map((item: any, idx: number) => (
+                {(content?.items || []).slice(0, 2).map((item: { title?: string; description?: string }, idx: number) => (
                   <div key={idx} className="flex-1 p-1 bg-muted rounded text-xs text-center border">
                     <div className="truncate">{item?.title || `Item ${idx + 1}`}</div>
                   </div>
@@ -307,7 +307,7 @@ export function VisualQuizEditor({
             <div className="space-y-2">
               <p className="text-xs font-medium truncate">{content?.title || 'Preços'}</p>
               <div className="flex gap-1">
-                {(content?.plans || []).slice(0, 2).map((plan: any, idx: number) => (
+                {(content?.plans || []).slice(0, 2).map((plan: { name?: string; price?: string }, idx: number) => (
                   <div key={idx} className="flex-1 p-1 bg-muted rounded text-center border">
                     <div className="text-xs font-medium truncate">{plan?.name || `Plano ${idx + 1}`}</div>
                     <div className="text-xs text-primary">{plan?.price || 'R$ 0'}</div>

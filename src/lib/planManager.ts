@@ -1,4 +1,4 @@
-import { UserPlan, PlanLimits, PlanFeatures, PLAN_LIMITS, PLAN_INFO } from '@/types/user';
+import { UserPlan, PlanLimits, PlanFeatures, PLAN_LIMITS, PLAN_INFO, User } from '@/types/user';
 import { DemoUserManager } from './demoUser';
 import { localDB } from './localStorage';
 import { PaymentService } from './paymentService';
@@ -17,7 +17,7 @@ export class PlanManager {
   /**
    * Check if user can use branching logic feature
    */
-  static async canUseBranching(user: any): Promise<boolean> {
+  static async canUseBranching(user: User | null): Promise<boolean> {
     // Se não tiver usuário, não pode usar
     if (!user) return false;
     
@@ -107,7 +107,7 @@ export class PlanManager {
 
     // Calculate responses this month
     const thisMonth = new Date().toISOString().substring(0, 7); // YYYY-MM
-    const monthlyResponses = results.filter((r: any) => 
+    const monthlyResponses = results.filter((r: { createdAt?: string }) => 
       r.createdAt?.startsWith(thisMonth)
     ).length;
 
@@ -266,7 +266,7 @@ export class PlanManager {
   /**
    * Log plan-related events (for analytics)
    */
-  private static logPlanEvent(event: string, plan: UserPlan, metadata?: any): void {
+  private static logPlanEvent(event: string, plan: UserPlan, metadata?: Record<string, unknown>): void {
     const logEntry = {
       event,
       plan,
@@ -353,7 +353,7 @@ export class PlanManager {
   /**
    * Get results from localStorage
    */
-  private static getResults(): any[] {
+  private static getResults(): { createdAt?: string }[] {
     try {
       const data = localStorage.getItem('elevado_results');
       return data ? JSON.parse(data) : [];

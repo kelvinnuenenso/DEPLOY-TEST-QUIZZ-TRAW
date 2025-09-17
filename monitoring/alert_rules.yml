@@ -1,0 +1,143 @@
+# Regras de alerta para QuizLiftOff
+groups:
+  - name: quizliftoff.rules
+    rules:
+      # Alerta quando a aplicação está down
+      - alert: ApplicationDown
+        expr: up{job="quizliftoff-app"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "QuizLiftOff application is down"
+          description: "A aplicação QuizLiftOff está inacessível há mais de 1 minuto."
+
+      # Alerta para alta latência
+      - alert: HighLatency
+        expr: nginx_http_request_duration_seconds{quantile="0.95"} > 2
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High latency detected"
+          description: "95% das requisições estão levando mais de 2 segundos para responder."
+
+      # Alerta para alto uso de CPU
+      - alert: HighCPUUsage
+        expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High CPU usage detected"
+          description: "Uso de CPU está acima de 80% há mais de 5 minutos no servidor {{ $labels.instance }}."
+
+      # Alerta para alta utilização de memória
+      - alert: HighMemoryUsage
+        expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 85
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High memory usage detected"
+          description: "Uso de memória está acima de 85% há mais de 5 minutos no servidor {{ $labels.instance }}."
+
+      # Alerta para pouco espaço em disco
+      - alert: LowDiskSpace
+        expr: (1 - (node_filesystem_avail_bytes{fstype!="tmpfs"} / node_filesystem_size_bytes{fstype!="tmpfs"})) * 100 > 90
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Low disk space detected"
+          description: "Espaço em disco está acima de 90% no servidor {{ $labels.instance }} no filesystem {{ $labels.mountpoint }}."
+
+      # Alerta para Redis down
+      - alert: RedisDown
+        expr: up{job="redis-exporter"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Redis is down"
+          description: "O servidor Redis está inacessível há mais de 1 minuto."
+
+      # Alerta para alta utilização de memória do Redis
+      - alert: RedisHighMemoryUsage
+        expr: (redis_memory_used_bytes / redis_memory_max_bytes) * 100 > 90
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Redis high memory usage"
+          description: "Redis está usando mais de 90% da memória disponível."
+
+      # Alerta para muitas conexões rejeitadas
+      - alert: RedisRejectedConnections
+        expr: increase(redis_rejected_connections_total[5m]) > 0
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Redis rejecting connections"
+          description: "Redis está rejeitando conexões. Pode indicar limite de conexões atingido."
+
+      # Alerta para alta taxa de erro HTTP
+      - alert: HighErrorRate
+        expr: (rate(nginx_http_requests_total{status=~"5.."}[5m]) / rate(nginx_http_requests_total[5m])) * 100 > 5
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High HTTP error rate"
+          description: "Taxa de erros HTTP 5xx está acima de 5% há mais de 5 minutos."
+
+      # Alerta para certificado SSL expirando
+      - alert: SSLCertificateExpiringSoon
+        expr: probe_ssl_earliest_cert_expiry - time() < 86400 * 7
+        for: 1h
+        labels:
+          severity: warning
+        annotations:
+          summary: "SSL certificate expiring soon"
+          description: "Certificado SSL expira em menos de 7 dias para {{ $labels.instance }}."
+
+      # Alerta para falha no health check
+      - alert: HealthCheckFailed
+        expr: probe_success{job="blackbox"} == 0
+        for: 3m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Health check failed"
+          description: "Health check falhou para {{ $labels.instance }} há mais de 3 minutos."
+
+      # Alerta para muitas requisições por segundo (possível DDoS)
+      - alert: HighRequestRate
+        expr: rate(nginx_http_requests_total[1m]) > 1000
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High request rate detected"
+          description: "Taxa de requisições muito alta: {{ $value }} req/s. Possível ataque DDoS."
+
+      # Alerta para Prometheus não conseguindo fazer scrape
+      - alert: PrometheusTargetDown
+        expr: up == 0
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Prometheus target down"
+          description: "Prometheus não consegue fazer scrape do target {{ $labels.job }} ({{ $labels.instance }}) há mais de 5 minutos."
+
+      # Alerta para backup falhando
+      - alert: BackupFailed
+        expr: time() - backup_last_success_timestamp > 86400 * 2
+        for: 1h
+        labels:
+          severity: warning
+        annotations:
+          summary: "Backup failed"
+          description: "Último backup bem-sucedido foi há mais de 2 dias."

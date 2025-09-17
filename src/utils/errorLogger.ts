@@ -6,7 +6,7 @@ interface ErrorContext {
   userAgent: string;
   userId?: string;
   component?: string;
-  props?: any;
+  props?: Record<string, unknown>;
   componentStack?: string;
 }
 

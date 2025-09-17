@@ -69,9 +69,9 @@ export interface Question {
   description?: string;
   options?: QuestionOption[];
   required?: boolean;
-  logic?: any;
+  logic?: Record<string, unknown>;
   score_weight?: number;
-  settings?: any;
+  settings?: Record<string, unknown>;
 }
 
 export interface QuizTheme {
@@ -198,7 +198,7 @@ export interface QuizTheme {
   microRewardsAchievementSound?: string;
   microRewardsFinalScore?: boolean;
   microRewardsShowProfile?: boolean;
-  microRewardsCustomProfiles?: any[];
+  microRewardsCustomProfiles?: Record<string, unknown>[];
   // Social Sharing
   socialSharingEnabled?: boolean;
   socialSharingWhatsApp?: boolean;
@@ -301,7 +301,7 @@ export interface QuizOutcome {
 export interface Component {
   id: string;
   type: ComponentType;
-  content: any;
+  content: Record<string, unknown>;
   style?: ComponentStyle;
   conditions?: ComponentCondition[];
   writtenResponse?: WrittenResponseConfig;
@@ -317,8 +317,8 @@ export interface ComponentProperties {
   title?: string;
   text?: string;
   placeholder?: string;
-  options?: Array<{ id: string; label: string; value?: any }>;
-  [key: string]: any;
+  options?: Array<{ id: string; label: string; value?: unknown }>;
+  [key: string]: unknown;
 }
 
 export interface WrittenResponseConfig {
@@ -362,7 +362,7 @@ export interface ComponentCondition {
   type: 'show_if' | 'hide_if';
   field: string;
   operator: 'equals' | 'not_equals' | 'contains' | 'greater_than' | 'less_than';
-  value: any;
+  value: unknown;
 }
 
 // Sistema de etapas
@@ -393,8 +393,8 @@ export interface FlowCondition {
   type: 'response' | 'score' | 'tag' | 'calculation';
   field: string;
   operator: 'equals' | 'not_equals' | 'contains' | 'greater_than' | 'less_than' | 'between';
-  value: any;
-  secondValue?: any; // for 'between' operator
+  value: unknown;
+  secondValue?: unknown; // for 'between' operator
 }
 
 // Fluxo visual
@@ -419,7 +419,7 @@ export interface FlowEdge {
   target: string;
   label?: string;
   type?: 'default' | 'conditional' | 'calculation';
-  style?: any;
+  style?: Record<string, unknown>;
   data?: {
     condition?: FlowCondition;
     color?: string;
@@ -487,12 +487,12 @@ export interface UserPersona {
   age?: number;
   interests: string[];
   behavior: 'careful' | 'quick' | 'thorough' | 'random';
-  responses: Record<string, any>;
+  responses: Record<string, unknown>;
 }
 
 export interface SimulationResult {
   stepId: string;
-  response: any;
+  response: unknown;
   score: number;
   path: string[];
   timestamp: number;
@@ -505,7 +505,7 @@ export interface FlowSuggestion {
   description: string;
   impact: 'low' | 'medium' | 'high';
   confidence: number;
-  suggestion: any;
+  suggestion: Record<string, unknown>;
 }
 
 export interface CustomEvent {
@@ -569,7 +569,7 @@ export interface Quiz {
   description?: string;
   status: 'draft' | 'published' | 'archived';
   theme?: QuizTheme;
-  settings?: any;
+  settings?: Record<string, unknown>;
   steps?: QuizStep[]; // Novo sistema de etapas
   questions: Question[]; // Manter compatibilidade com sistema antigo
   outcomes?: Record<string, QuizOutcome>;
@@ -600,7 +600,7 @@ export interface QuizFlow {
 
 export interface QuizAnswer {
   questionId: string;
-  value: any;
+  value: unknown;
 }
 
 export interface Result {
@@ -611,7 +611,7 @@ export interface Result {
   score?: number;
   outcomeKey?: string;
   utm?: Record<string, string>;
-  meta?: any;
+  meta?: Record<string, unknown>;
   answers: QuizAnswer[];
 }
 
@@ -623,6 +623,6 @@ export interface Lead {
   email?: string;
   phone?: string;
   tags?: string[];
-  customFields?: any;
+  customFields?: Record<string, unknown>;
   createdAt: string;
 }

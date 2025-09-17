@@ -1,4 +1,11 @@
-# Guia de Integração Stripe - Sistema de Pagamentos
+Próximos passos recomendados:
+
+1. 1.
+   Testar o fluxo completo de assinatura
+2. 2.
+   Monitorar os eventos do webhook
+3. 3.
+   Implementar notificações para os usuários sobre status de pagamento 
 
 ## 📋 Visão Geral
 

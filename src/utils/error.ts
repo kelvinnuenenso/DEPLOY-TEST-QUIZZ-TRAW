@@ -7,7 +7,7 @@ export class AppError extends Error {
   }
 }
 
-export const handleError = (error: unknown, context?: Record<string, any>) => {
+export const handleError = (error: unknown, context?: Record<string, unknown>) => {
   if (error instanceof AppError) {
     // Registra erro de aplicação como evento
     captureEvent('AppError', {

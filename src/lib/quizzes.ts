@@ -17,7 +17,7 @@ export async function saveQuiz(quiz: Quiz): Promise<Quiz> {
       // Preparar dados para salvar
       const quizData = {
         id: quiz.id,
-        title: quiz.title,
+        title: quiz.name,
         description: quiz.description,
         public_id: quiz.publicId,
         questions: quiz.questions,
@@ -29,7 +29,7 @@ export async function saveQuiz(quiz: Quiz): Promise<Quiz> {
       };
 
       // Validar dados obrigatórios
-      if (!quizData.title) throw new Error('O título do quiz é obrigatório');
+      if (!quizData.title) throw new Error('O nome do quiz é obrigatório');
       if (!quizData.public_id) throw new Error('O ID público do quiz é obrigatório');
       if (!quizData.user_id) throw new Error('ID do usuário não encontrado');
 
@@ -52,7 +52,7 @@ export async function saveQuiz(quiz: Quiz): Promise<Quiz> {
       // Convert from DB format to app format
       return {
         id: data.id,
-        title: data.title,
+        name: data.title,
         description: data.description,
         publicId: data.public_id,
         questions: data.questions,
@@ -93,7 +93,7 @@ export async function loadQuizByPublicId(publicId: string): Promise<Quiz | null>
       // Convert from DB format to app format
       return {
         id: data.id,
-        title: data.title,
+        name: data.title,
         description: data.description,
         publicId: data.public_id,
         questions: data.questions,
@@ -131,7 +131,7 @@ export async function loadQuiz(id: string): Promise<Quiz | null> {
       // Convert from DB format to app format
       return {
         id: data.id,
-        title: data.title,
+        name: data.title,
         description: data.description,
         publicId: data.public_id,
         questions: data.questions,
@@ -170,7 +170,7 @@ export async function listQuizzes(): Promise<Quiz[]> {
       // Convert from DB format to app format
       return data.map(item => ({
         id: item.id,
-        title: item.title,
+        name: item.title,
         description: item.description,
         publicId: item.public_id,
         questions: item.questions,

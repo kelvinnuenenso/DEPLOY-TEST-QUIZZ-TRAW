@@ -106,16 +106,18 @@ export const useSmartProgress = ({
       
       // Apply stage-specific behavior
       switch (funnelStage.progressBehavior) {
-        case 'accelerating':
+        case 'accelerating': {
           const stagePosition = funnelStage.stepIds.indexOf(currentStep.toString());
           const accelerationFactor = 1 + (stagePosition / funnelStage.stepIds.length) * 0.5;
           baseIncrement *= accelerationFactor;
           break;
-        case 'decelerating':
+        }
+        case 'decelerating': {
           const stagePos = funnelStage.stepIds.indexOf(currentStep.toString());
           const decelerationFactor = 1.5 - (stagePos / funnelStage.stepIds.length) * 0.5;
           baseIncrement *= decelerationFactor;
           break;
+        }
         case 'smart':
           baseIncrement *= userBehavior.currentVelocity;
           break;

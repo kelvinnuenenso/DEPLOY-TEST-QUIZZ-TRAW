@@ -24,18 +24,18 @@ serve(async (req) => {
     )
 
     const { data: user, error: userError } = await supabaseAdmin
-      .from('users')
-      .select('stripe_customer_id')
+      .from('user_profiles')
+      .select('subscription_id')
       .eq('id', userId)
       .single()
 
     if (userError) throw userError
 
-    let customerId = user?.stripe_customer_id
+    let customerId = user?.subscription_id
 
     if (!customerId) {
       const { data: userData } = await supabaseAdmin
-        .from('users')
+        .from('user_profiles')
         .select('email, full_name')
         .eq('id', userId)
         .single()

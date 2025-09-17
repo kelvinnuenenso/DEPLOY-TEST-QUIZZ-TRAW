@@ -19,7 +19,7 @@ export function safeFind<T>(array: T[] | undefined | null, predicate: (item: T) 
   return array.find(predicate);
 }
 
-export function safeLength(array: any[] | undefined | null): number {
+export function safeLength(array: unknown[] | undefined | null): number {
   if (!array || !Array.isArray(array)) return 0;
   return array.length;
 }

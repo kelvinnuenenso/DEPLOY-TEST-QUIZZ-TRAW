@@ -18,7 +18,7 @@ export function MultipleChoiceEditor({ component, onUpdate }: MultipleChoiceEdit
   const content = component.content || {};
   const options = content.options || [];
 
-  const updateContent = (updates: any) => {
+  const updateContent = (updates: Record<string, unknown>) => {
     onUpdate({
       content: { ...content, ...updates }
     });
@@ -37,14 +37,14 @@ export function MultipleChoiceEditor({ component, onUpdate }: MultipleChoiceEdit
     });
   };
 
-  const updateOption = (index: number, updates: any) => {
+  const updateOption = (index: number, updates: Record<string, unknown>) => {
     const newOptions = [...options];
     newOptions[index] = { ...newOptions[index], ...updates };
     updateContent({ options: newOptions });
   };
 
   const removeOption = (index: number) => {
-    const newOptions = options.filter((_: any, i: number) => i !== index);
+    const newOptions = options.filter((_: unknown, i: number) => i !== index);
     updateContent({ options: newOptions });
   };
 
@@ -109,7 +109,7 @@ export function MultipleChoiceEditor({ component, onUpdate }: MultipleChoiceEdit
         </div>
         
         <div className="space-y-3">
-          {options.map((option: any, index: number) => (
+          {options.map((option: { id?: string; text?: string; correct?: boolean }, index: number) => (
             <Card key={option.id || index} className="p-3 border-dashed">
               <div className="flex items-start gap-2">
                 <div className="flex items-center">

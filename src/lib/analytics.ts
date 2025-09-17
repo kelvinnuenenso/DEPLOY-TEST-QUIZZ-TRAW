@@ -246,7 +246,7 @@ export class AnalyticsManager {
     return d >= start && d <= end;
   }
 
-  private static generateTimeSeriesData(data: any[], type: string): TimeSeriesData[] {
+  private static generateTimeSeriesData(data: Result[], type: string): TimeSeriesData[] {
     const last30Days = Array.from({ length: 30 }, (_, i) => {
       const date = new Date();
       date.setDate(date.getDate() - (29 - i));

@@ -358,7 +358,7 @@ export function SimplePropertyPanel({
                     </div>
                     
                     <div className="space-y-2 max-h-48 overflow-y-auto">
-                      {(component.content.options || []).map((option: any, index: number) => (
+                      {(component.content.options || []).map((option: { id?: string; label?: string; score?: number }, index: number) => (
                         <div key={option.id || index} className="p-2 border rounded-lg bg-muted/30">
                           <div className="space-y-1">
                             <Input
@@ -392,7 +392,7 @@ export function SimplePropertyPanel({
                                 variant="ghost"
                                 size="sm"
                                 onClick={() => {
-                                  const newOptions = (component.content.options || []).filter((_: any, i: number) => i !== index);
+                                  const newOptions = (component.content.options || []).filter((_: unknown, i: number) => i !== index);
                                   onUpdateComponent({
                                     content: { ...component.content, options: newOptions }
                                   });

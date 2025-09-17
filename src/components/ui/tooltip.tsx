@@ -1,30 +1,63 @@
-import * as React from "react"
-import * as TooltipPrimitive from "@radix-ui/react-tooltip"
+"use client"
 
+import * as React from "react"
 import { cn } from "@/lib/utils"
 
-const TooltipProvider = ({ children, ...props }: { children: React.ReactNode } & TooltipPrimitive.TooltipProviderProps) => {
-  return <TooltipPrimitive.Provider {...props}>{children}</TooltipPrimitive.Provider>
+// Simple tooltip implementation without Radix UI
+interface TooltipProviderProps {
+  children: React.ReactNode;
 }
 
-const Tooltip = TooltipPrimitive.Root
+// Implementação mais simples sem hooks para evitar conflitos
+const TooltipProvider = ({ children }: TooltipProviderProps) => {
+  return React.createElement(React.Fragment, null, children);
+};
 
-const TooltipTrigger = TooltipPrimitive.Trigger
+interface TooltipProps {
+  children: React.ReactNode;
+}
 
-const TooltipContent = React.forwardRef<
-  React.ElementRef<typeof TooltipPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content>
->(({ className, sideOffset = 4, ...props }, ref) => (
-  <TooltipPrimitive.Content
-    ref={ref}
-    sideOffset={sideOffset}
-    className={cn(
-      "z-50 overflow-hidden rounded-md border bg-popover px-3 py-1.5 text-sm text-popover-foreground shadow-md animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
-      className
-    )}
-    {...props}
-  />
-))
-TooltipContent.displayName = TooltipPrimitive.Content.displayName
+const Tooltip: React.FC<TooltipProps> = ({ children }) => {
+  return <div className="relative inline-block">{children}</div>;
+};
 
-export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider }
+interface TooltipTriggerProps {
+  children: React.ReactNode;
+  className?: string;
+  asChild?: boolean;
+}
+
+const TooltipTrigger = ({ children, className, ...props }: TooltipTriggerProps) => {
+  return (
+    <div className={cn("cursor-pointer", className)} {...props}>
+      {children}
+    </div>
+  );
+};
+TooltipTrigger.displayName = "TooltipTrigger";
+
+interface TooltipContentProps {
+  children: React.ReactNode;
+  className?: string;
+  sideOffset?: number;
+}
+
+const TooltipContent = ({ children, className, sideOffset = 4, ...props }: TooltipContentProps) => {
+  return (
+    <div
+      className={cn(
+        "absolute z-50 overflow-hidden rounded-md border bg-popover px-3 py-1.5 text-sm text-popover-foreground shadow-md",
+        "opacity-0 pointer-events-none transition-opacity duration-200",
+        "group-hover:opacity-100 group-hover:pointer-events-auto",
+        className
+      )}
+      style={{ top: `calc(100% + ${sideOffset}px)` }}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+};
+TooltipContent.displayName = "TooltipContent";
+
+export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider };

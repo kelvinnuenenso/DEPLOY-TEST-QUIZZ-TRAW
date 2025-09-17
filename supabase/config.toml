@@ -3,9 +3,9 @@ project_id = "rijvidluwvzvatoarqoe"
 [api]
 enabled = true
 port = 54321
-schemas = ["public", "graphql_public"]
+schemas = ["public", "storage", "graphql_public"]
 extra_search_path = ["public", "extensions"]
-max_rows = 1000
+max_rows = 10000
 
 [db]
 port = 54322
@@ -28,12 +28,15 @@ image_transformation = { enabled = true }
 [auth]
 enabled = true
 port = 54326
-site_url = "http://127.0.0.1:3000"
-additional_redirect_urls = ["https://lovable.dev"]
-jwt_expiry = 3600
+site_url = "http://localhost:3000"
+additional_redirect_urls = ["https://lovable.dev", "https://quiz-lift-off.vercel.app"]
+jwt_expiry = 86400
 refresh_token_rotation_enabled = true
 security_update_password_require_reauthentication = true
 enable_signup = true
+enable_confirmations = true
+enable_recoveries = true
+min_password_length = 8
 
 [edge_runtime]
 enabled = true
@@ -43,4 +46,4 @@ port = 54327
 enabled = false
 
 [functions.firecrawl]
-verify_jwt = false
+verify_jwt = true

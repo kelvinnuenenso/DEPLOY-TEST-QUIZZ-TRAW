@@ -22,7 +22,7 @@ export function RealQuizPreview({ quiz, activeStepId, className = '' }: RealQuiz
 
   const currentStep = quiz.steps?.find(step => step.id === activeStepId) || quiz.steps?.[0];
   const stepIndex = quiz.steps?.findIndex(step => step.id === activeStepId) ?? 0;
-  const progress = quiz.steps?.length ? ((stepIndex + 1) / quiz.steps.length) * 100 : 0;
+  const progress = quiz.steps ? ((stepIndex + 1) / quiz.steps.length) * 100 : 0;
 
   if (!currentStep) {
     return (

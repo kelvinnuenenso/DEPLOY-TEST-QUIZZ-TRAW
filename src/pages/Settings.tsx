@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Textarea } from '@/components/ui/textarea';
-import useAuth from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/useAuth';
 import { localDB, type UserProfile } from '@/lib/localStorage';
 import { useToast } from '@/hooks/use-toast';
 import { 

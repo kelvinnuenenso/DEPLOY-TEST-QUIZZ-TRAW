@@ -1,7 +1,7 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import Stripe from 'https://esm.sh/stripe@12.18.0'
-import { notificationService } from '../services/notificationService'
+// import { notificationService } from '../services/notificationService' // Removido - serviço não implementado
 
 const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') || '', {
   apiVersion: '2023-10-16',
@@ -33,21 +33,21 @@ serve(async (req) => {
       case 'checkout.session.completed': {
         const session = event.data.object as Stripe.Checkout.Session
         await handleCheckoutCompleted(session)
-        notificationService.paymentSuccess()
+        // notificationService.paymentSuccess() // Removido - serviço não implementado
         break
       }
       
       case 'customer.subscription.updated': {
         const subscription = event.data.object as Stripe.Subscription
         await handleSubscriptionUpdated(subscription)
-        notificationService.subscriptionUpdated()
+        // notificationService.subscriptionUpdated() // Removido - serviço não implementado
         break
       }
       
       case 'customer.subscription.deleted': {
         const subscription = event.data.object as Stripe.Subscription
         await handleSubscriptionDeleted(subscription)
-        notificationService.subscriptionCanceled()
+        // notificationService.subscriptionCanceled() // Removido - serviço não implementado
         break
       }
       

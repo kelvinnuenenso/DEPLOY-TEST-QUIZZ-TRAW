@@ -37,7 +37,7 @@ export function NewVisualEditor({
   // Estados principais
   const [isInitialized, setIsInitialized] = useState(false);
   const [isAutoGenerating, setIsAutoGenerating] = useState(false);
-  const [activeStepId, setActiveStepId] = useState<string>('');
+  const [activeStepId, setActiveStepId] = useState<string>(quiz.steps?.[0]?.id || '');
   const [selectedComponentId, setSelectedComponentId] = useState<string | null>(null);
   const [previewMode, setPreviewMode] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
   const [draggedComponentType, setDraggedComponentType] = useState<ComponentType | null>(null);
@@ -162,7 +162,7 @@ export function NewVisualEditor({
       setHistory([quiz]);
       setHistoryIndex(0);
     }
-  }, [needsAutoGeneration, isAutoGenerating, generateQuizFromContent, isInitialized, quiz]);
+  }, [needsAutoGeneration, isAutoGenerating, generateQuizFromContent, isInitialized, quiz.steps]);
 
   // Funções de controle
   const handleUndo = useCallback(() => {

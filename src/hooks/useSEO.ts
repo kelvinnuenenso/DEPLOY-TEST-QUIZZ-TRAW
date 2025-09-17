@@ -58,7 +58,7 @@ export function useSEO(quiz?: Quiz, options: SEOOptions = {}) {
     };
 
     // Store sharing URLs for social media
-    (window as any).sharingURLs = {
+    (window as Window & { sharingURLs?: Record<string, string> }).sharingURLs = {
       facebook: generateSharingURL('facebook'),
       twitter: generateSharingURL('twitter'),
       linkedin: generateSharingURL('linkedin'),

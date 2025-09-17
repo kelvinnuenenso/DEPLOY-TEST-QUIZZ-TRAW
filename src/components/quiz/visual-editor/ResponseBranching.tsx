@@ -267,7 +267,7 @@ export function ResponseBranching({
                         <Label>Ação</Label>
                         <Select
                           value={branch.actionType}
-                          onValueChange={(value: any) => updateBranch(branch.id, { actionType: value })}
+                          onValueChange={(value: string) => updateBranch(branch.id, { actionType: value })}
                         >
                           <SelectTrigger>
                             <SelectValue />
@@ -350,7 +350,7 @@ export function ResponseBranching({
                                   />
                                   <Select
                                     value={condition.operator}
-                                    onValueChange={(value: any) => updateCondition(branch.id, condition.id, { operator: value })}
+                                    onValueChange={(value: string) => updateCondition(branch.id, condition.id, { operator: value })}
                                   >
                                     <SelectTrigger>
                                       <SelectValue />

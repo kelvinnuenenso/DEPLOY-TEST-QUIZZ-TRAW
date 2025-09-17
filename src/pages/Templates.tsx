@@ -12,10 +12,10 @@ interface QuizTemplate {
   name: string;
   description: string;
   category: string;
-  icon: React.ComponentType<any>;
+  icon: React.ComponentType<Record<string, unknown>>;
   questions: Omit<Question, 'id'>[];
-  outcomes: Record<string, any>;
-  theme: any;
+  outcomes: Record<string, unknown>;
+  theme: Record<string, unknown>;
   tags: string[];
 }
 
@@ -24,7 +24,7 @@ const Templates = () => {
   const { toast } = useToast();
   const [isCreating, setIsCreating] = useState(false);
 
-  const handleSelectTemplate = async (template: any) => {
+  const handleSelectTemplate = async (template: QuizTemplate) => {
     setIsCreating(true);
     
     try {

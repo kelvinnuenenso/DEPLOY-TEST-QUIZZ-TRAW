@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Usuário de Teste</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f8fafc;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #1f2937;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+            width: 100%;
+        }
+        .button:hover {
+            background: #2563eb;
+        }
+        .button.success {
+            background: #10b981;
+        }
+        .button.success:hover {
+            background: #059669;
+        }
+        .status {
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: 500;
+            text-align: center;
+        }
+        .status.success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #10b981;
+        }
+        .status.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #ef4444;
+        }
+        .info {
+            background: #f0f9ff;
+            border: 1px solid #0ea5e9;
+            color: #0c4a6e;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        pre {
+            background: #f3f4f6;
+            padding: 10px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-size: 12px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>👤 Criar Usuário de Teste</h1>
+        
+        <div class="info">
+            <strong>ℹ️ Informação:</strong><br>
+            Este script criará um usuário de teste no localStorage para permitir que os botões "Novo Quiz" e "Editar" funcionem corretamente.
+        </div>
+
+        <button class="button" onclick="createTestUser()">🚀 Criar Usuário de Teste</button>
+        
+        <div id="status"></div>
+        
+        <button class="button" onclick="openDashboard()" id="openBtn" style="display: none;">📊 Abrir Dashboard</button>
+    </div>
+
+    <script>
+        function showStatus(message, type = 'success') {
+            const statusDiv = document.getElementById('status');
+            statusDiv.innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+
+        function createTestUser() {
+            try {
+                // Criar usuário de teste
+                const testUser = {
+                    id: 'test-user-' + Date.now(),
+                    name: 'Usuário de Teste',
+                    email: 'teste@elevado.com',
+                    createdAt: new Date().toISOString(),
+                    plan: 'free',
+                    settings: {
+                        theme: 'light',
+                        notifications: true,
+                        autoSave: true
+                    }
+                };
+
+                // Salvar no localStorage com a chave correta
+                localStorage.setItem('elevado_user', JSON.stringify(testUser));
+                
+                console.log('✅ Usuário de teste criado:', testUser);
+                
+                // Verificar se foi salvo corretamente
+                const savedUser = localStorage.getItem('elevado_user');
+                if (savedUser) {
+                    const parsed = JSON.parse(savedUser);
+                    showStatus(`
+                        ✅ <strong>Usuário criado com sucesso!</strong><br><br>
+                        <strong>Nome:</strong> ${parsed.name}<br>
+                        <strong>Email:</strong> ${parsed.email}<br>
+                        <strong>Plano:</strong> ${parsed.plan}<br>
+                        <strong>ID:</strong> ${parsed.id}<br><br>
+                        <pre>${JSON.stringify(parsed, null, 2)}</pre>
+                    `, 'success');
+                    
+                    // Mostrar botão para abrir dashboard
+                    document.getElementById('openBtn').style.display = 'block';
+                    document.getElementById('openBtn').className = 'button success';
+                } else {
+                    showStatus('❌ Erro: Usuário não foi salvo corretamente', 'error');
+                }
+                
+            } catch (error) {
+                console.error('Erro ao criar usuário de teste:', error);
+                showStatus('❌ Erro ao criar usuário: ' + error.message, 'error');
+            }
+        }
+
+        function openDashboard() {
+            try {
+                const dashboardUrl = 'http://localhost:3000/app/dashboard';
+                console.log('🚀 Abrindo dashboard:', dashboardUrl);
+                
+                // Abrir em nova aba
+                const newWindow = window.open(dashboardUrl, '_blank');
+                
+                if (newWindow) {
+                    showStatus('✅ Dashboard aberto em nova aba!', 'success');
+                } else {
+                    showStatus('❌ Falha ao abrir dashboard - popup bloqueado?', 'error');
+                }
+            } catch (error) {
+                console.error('Erro ao abrir dashboard:', error);
+                showStatus('❌ Erro ao abrir dashboard: ' + error.message, 'error');
+            }
+        }
+
+        // Verificar se já existe um usuário
+        window.addEventListener('load', () => {
+            const existingUser = localStorage.getItem('elevado_user');
+            if (existingUser) {
+                try {
+                    const user = JSON.parse(existingUser);
+                    showStatus(`
+                        ℹ️ <strong>Usuário já existe:</strong><br><br>
+                        <strong>Nome:</strong> ${user.name}<br>
+                        <strong>Email:</strong> ${user.email}<br><br>
+                        Você pode criar um novo usuário ou usar o existente.
+                    `, 'success');
+                    document.getElementById('openBtn').style.display = 'block';
+                    document.getElementById('openBtn').className = 'button success';
+                } catch (error) {
+                    showStatus('⚠️ Usuário existente está corrompido. Crie um novo.', 'error');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -6,7 +6,7 @@ class AutoSaveManager {
   private timeouts: Map<string, NodeJS.Timeout> = new Map();
   private readonly AUTOSAVE_DELAY = 3000; // 3 seconds
 
-  scheduleAutosave(quiz: Quiz, onSuccess?: () => void, onError?: (error: any) => void) {
+  scheduleAutosave(quiz: Quiz, onSuccess?: () => void, onError?: (error: Error) => void) {
     // Clear existing timeout for this quiz
     const existingTimeout = this.timeouts.get(quiz.id);
     if (existingTimeout) {

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Helmet } from 'react-helmet-async';
+// import { Helmet } from 'react-helmet-async';
 import { Quiz } from '@/types/quiz';
 
 interface SEOHeadProps {
@@ -55,53 +55,49 @@ export function SEOHead({
   } : null;
 
   return (
-    <Helmet>
-      {/* Basic Meta Tags */}
-      <title>{seoTitle}</title>
-      <meta name="description" content={seoDescription} />
-      <meta name="keywords" content="quiz, interativo, formulário, lead generation, conversão" />
-      
-      {/* Open Graph / Facebook */}
-      <meta property="og:type" content={type} />
-      <meta property="og:title" content={seoTitle} />
-      <meta property="og:description" content={seoDescription} />
-      <meta property="og:image" content={seoImage} />
-      <meta property="og:url" content={seoUrl} />
-      <meta property="og:site_name" content="Elevado Quizz" />
-      
-      {/* Twitter */}
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content={seoTitle} />
-      <meta name="twitter:description" content={seoDescription} />
-      <meta name="twitter:image" content={seoImage} />
-      <meta name="twitter:site" content="@elevadoquizz" />
-      
-      {/* Additional Meta Tags */}
-      <meta name="robots" content="index, follow" />
-      <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
-      
-      {/* Canonical URL */}
-      <link rel="canonical" href={seoUrl} />
-      
-      {/* Structured Data */}
-      {structuredData && (
-        <script type="application/ld+json">
-          {JSON.stringify(structuredData)}
-        </script>
-      )}
-      
-      {/* PWA Meta Tags */}
-      <meta name="theme-color" content="#2563EB" />
-      <meta name="apple-mobile-web-app-capable" content="yes" />
-      <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-      <meta name="apple-mobile-web-app-title" content="Elevado Quizz" />
-      
-      {/* Preload Critical Resources */}
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-      
-      {/* Favicon */}
-      <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    </Helmet>
+    <div>
+      {/* SEO Head component temporarily disabled */}
+      {/* 
+      <Helmet>
+        <title>{seoTitle}</title>
+        <meta name="description" content={seoDescription} />
+        <meta name="keywords" content="quiz, interativo, formulário, lead generation, conversão" />
+        
+        <meta property="og:type" content={type} />
+        <meta property="og:title" content={seoTitle} />
+        <meta property="og:description" content={seoDescription} />
+        <meta property="og:image" content={seoImage} />
+        <meta property="og:url" content={seoUrl} />
+        <meta property="og:site_name" content="Elevado Quizz" />
+        
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={seoTitle} />
+        <meta name="twitter:description" content={seoDescription} />
+        <meta name="twitter:image" content={seoImage} />
+        <meta name="twitter:site" content="@elevadoquizz" />
+        
+        <meta name="robots" content="index, follow" />
+        <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+        
+        <link rel="canonical" href={seoUrl} />
+        
+        {structuredData && (
+          <script type="application/ld+json">
+            {JSON.stringify(structuredData)}
+          </script>
+        )}
+        
+        <meta name="theme-color" content="#2563EB" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="Elevado Quizz" />
+        
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+      </Helmet>
+      */}
+    </div>
   );
 }

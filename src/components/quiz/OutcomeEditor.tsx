@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+// Tooltips removidos para resolver problemas de React
 import { QuizOutcome, Quiz } from '@/types/quiz';
 import { Plus, Trash2, Trophy, Target, Zap, Heart, Star, Award, ExternalLink, Info } from 'lucide-react';
 
@@ -171,18 +171,11 @@ export function OutcomeEditor({ outcomes, quiz, onUpdate, onQuizUpdate }: Outcom
               checked={redirectSettings.enabled}
               onCheckedChange={(enabled) => updateRedirectSettings({ enabled })}
             />
-            <div className="flex items-center gap-1">
+            <div className="flex flex-col space-y-1">
               <Label htmlFor="redirect-enabled">Redirecionar ao final</Label>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <Info className="w-4 h-4 text-muted-foreground" />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Se ativado, os participantes serão enviados para uma URL externa ao finalizar o quiz.</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+              <p className="text-xs text-muted-foreground">
+                Se ativado, os participantes serão enviados para uma URL externa ao finalizar o quiz.
+              </p>
             </div>
           </div>
           
